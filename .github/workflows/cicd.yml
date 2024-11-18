@@ -10,7 +10,10 @@ jobs:
   build:
     runs-on: ubuntu-latest
 
-    # env:
+    env:
+      spring.datasource.url: ${{ secrets.RDS_HOST }}
+      spring.datasource.username: ${{ secrets.RDS_USERNAME }}
+      spring.datasource.password: ${{ secrets.RDS_PASSWORD }}
       # JASYPT_PASSWORD: ${{ secrets.JASYPT_PASSWORD }}
 
     steps:
@@ -35,16 +38,16 @@ jobs:
         shell: bash
 
       # 현재 시간 가져오기
-      #- name: Get Current time
-      #  uses: josStorer/get-current-time@v2.0.2
-      #  id: current-time
-      #  with:
-      #    format: YYYY-MM-DDTHH-mm-ss
-      #    utcOffset: "+09:00"
+      - name: Get Current time
+        uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
 
       # 배포용 패키지 경로 저장
-      #- name: Set artifact
-      #  run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
+      - name: Set artifact
+        run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
 
       #- name: zip 파일 생성
       #  run: |
@@ -57,15 +60,15 @@ jobs:
       #    mv before-deploy/$GITHUB_SHA.zip deploy/$GITHUB_SHA.zip
       #  shell: bash
 
-      # - name: AWS 자격 증명
-      #  uses: aws-actions/configure-aws-credentials@v1
-      #  with:
-      #    aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
-      #    aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-      #    aws-region: ap-northeast-2
+      - name: AWS 자격 증명
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
+          aws-region: ap-northeast-2
 
       # - name: S3 업로드
-      #  run: aws s3 cp --region ap-northeast-2 ./deploy/$GITHUB_SHA.zip s3://${{ secrets.S3_BUCKET_NAME }}/$GITHUB_SHA.zip
+        run: aws s3 cp --region ap-northeast-2 ./deploy/$GITHUB_SHA.zip s3://${{ secrets.S3_BUCKET_NAME }}/$GITHUB_SHA.zip
 
       #- name: CodeDeploy 배포
       #  run: aws deploy create-deployment --application-name covid19vaccinereview --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name covid19vaccinereview-group --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=$GITHUB_SHA.zip
