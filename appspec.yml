@@ -1,7 +1,7 @@
 version: 0.0
 os: linux
 files:
-  - source: TableQ-*-SNAPSHOT.jar
+  - source: / #/TableQ-*-SNAPSHOT.jar
     destination: /home/ec2-user/app/codeDeploy/
 
 #hooks:
