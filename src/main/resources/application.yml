@@ -6,4 +6,4 @@ spring:
   profiles:
     active: prod
   # config:
-  # location: classpath:/application-dev.yml
+  ## location: classpath:/application-dev.yml
