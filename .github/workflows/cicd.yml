@@ -49,17 +49,6 @@ jobs:
       - name: Set artifact
         run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
 
-      #- name: zip 파일 생성
-      #  run: |
-      #    mkdir -p before-deploy
-      #    cp scripts/*.sh before-deploy/
-      #    cp appspec.yml before-deploy/
-      #    cp build/libs/*.jar before-deploy/
-      #    cd before-deploy && zip -r ./$GITHUB_SHA.zip *
-      #    cd ../ && mkdir -p deploy
-      #    mv before-deploy/$GITHUB_SHA.zip deploy/$GITHUB_SHA.zip
-      #  shell: bash
-
       - name: AWS 자격 증명
         uses: aws-actions/configure-aws-credentials@v1
         with:
@@ -68,7 +57,7 @@ jobs:
           aws-region: ap-northeast-2
 
       - name: S3 업로드
-        run: aws s3 cp --region ap-northeast-2 ./build/libs/TableQ-1.0.1-SNAPSHOT.jar s3://${{ secrets.S3_BUCKET_NAME }}/TableQ-1.0.1-SNAPSHOT.jar
+        run: aws s3 cp --region ap-northeast-2 ./build/libs/${{ env.artifact }}.jar s3://${{ secrets.S3_BUCKET_NAME }}/${{ env.artifact }}.jar
 
       #- name: CodeDeploy 배포
       #  run: aws deploy create-deployment --application-name covid19vaccinereview --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name covid19vaccinereview-group --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=$GITHUB_SHA.zip
@@ -85,3 +74,13 @@ jobs:
       #    region: ap-northeast-2
       #    deployment_package: ./build/libs/${{env.artifact}}
 
+      #- name: zip 파일 생성
+      #  run: |
+      #    mkdir -p before-deploy
+      #    cp scripts/*.sh before-deploy/
+      #    cp appspec.yml before-deploy/
+      #    cp build/libs/*.jar before-deploy/
+      #    cd before-deploy && zip -r ./$GITHUB_SHA.zip *
+      #    cd ../ && mkdir -p deploy
+      #    mv before-deploy/$GITHUB_SHA.zip deploy/$GITHUB_SHA.zip
+      #  shell: bash
