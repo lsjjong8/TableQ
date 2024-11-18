@@ -18,7 +18,7 @@ jobs:
 
     steps:
       - name: 테스트
-        run: echo "test" "$AWS_ACCESS_KEY_ID 입니다."
+        run: echo "test" "${{ secrets.RDS_HOST }} 입니다."
 
       - name: 체크아웃 Github Action
         uses: actions/checkout@v3
