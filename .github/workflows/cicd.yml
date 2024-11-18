@@ -49,9 +49,6 @@ jobs:
       - name: Set artifact
         run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
 
-      - name: Test artifact path
-        run: echo "$GITHUB_ENV"
-
       #- name: zip 파일 생성
       #  run: |
       #    mkdir -p before-deploy
@@ -70,8 +67,8 @@ jobs:
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY_ID }}
           aws-region: ap-northeast-2
 
-      # - name: S3 업로드
-      #  run: aws s3 cp --region ap-northeast-2 ./deploy/$GITHUB_SHA.zip s3://${{ secrets.S3_BUCKET_NAME }}/$GITHUB_SHA.zip
+      - name: S3 업로드
+        run: aws s3 cp --region ap-northeast-2 ./build/libs/TableQ-1.0.1-SNAPSHOT.jar s3://${{ secrets.S3_BUCKET_NAME }}/TableQ-1.0.1-SNAPSHOT.jar
 
       #- name: CodeDeploy 배포
       #  run: aws deploy create-deployment --application-name covid19vaccinereview --deployment-config-name CodeDeployDefault.AllAtOnce --deployment-group-name covid19vaccinereview-group --s3-location bucket=${{ secrets.S3_BUCKET_NAME }},bundleType=zip,key=$GITHUB_SHA.zip
