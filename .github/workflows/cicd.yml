@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu-latest
 
     env:
-      spring.profiles.active: local
+      SPRING_PROFILES_ACTIVE: local  # Spring Profile을 local로 설정
       spring.datasource.url: ${{ secrets.RDS_HOST }}
       spring.datasource.username: ${{ secrets.RDS_USERNAME }}
       spring.datasource.password: ${{ secrets.RDS_PASSWORD }}
