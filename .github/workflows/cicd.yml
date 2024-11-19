@@ -44,10 +44,10 @@ jobs:
       - name: zip 파일 생성
         run: |
           mkdir -p deploy
+          cp appspec.yml deploy/
           cp build/libs/*.jar deploy/
           cd deploy && zip -r ./$GITHUB_SHA.zip *
           cd ../
-        #  cp appspec.yml deploy/
         #  mkdir -p before-deploy
         #  cp appspec.yml before-deploy/
         #  cp build/libs/*.jar before-deploy/
